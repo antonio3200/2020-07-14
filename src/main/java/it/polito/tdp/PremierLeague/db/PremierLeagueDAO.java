@@ -112,4 +112,50 @@ public class PremierLeagueDAO {
 		}
 	}
 	
+	public List<Integer> getRisultatiCasa(Team squadra){
+		String sql="SELECT ResultOfTeamHome AS num "
+				+ "FROM matches "
+				+ "WHERE TeamHomeId=? ";
+		List<Integer> result= new ArrayList<>();
+		Connection conn= DBConnect.getConnection();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1,squadra.getTeamID());
+			ResultSet rs= st.executeQuery();
+			while(rs.next()) {
+				Integer risultato=rs.getInt("num");
+				result.add(risultato);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("SQL ERROR");
+		}
+		return result;
+	}
+	
+	public List<Integer> getrisultatiTrasferta(Team squadra){
+		String sql="SELECT ResultOfTeamHome as num "
+				+ "FROM matches "
+				+ "WHERE TeamAwayId=?";
+		List<Integer> result= new ArrayList<>();
+		Connection conn= DBConnect.getConnection();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1,squadra.getTeamID());
+			ResultSet rs= st.executeQuery();
+			while(rs.next()) {
+				Integer risultato=rs.getInt("num");
+				result.add(risultato);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("SQL ERROR");
+		}
+		return result;
+	}
+	
 }

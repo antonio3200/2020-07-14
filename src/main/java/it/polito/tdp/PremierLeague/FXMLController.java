@@ -7,7 +7,10 @@ package it.polito.tdp.PremierLeague;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.PremierLeague.model.Differenza;
+import it.polito.tdp.PremierLeague.model.DifferenzaMinore;
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,7 +38,7 @@ public class FXMLController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbSquadra"
-    private ComboBox<?> cmbSquadra; // Value injected by FXMLLoader
+    private ComboBox<Team> cmbSquadra; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtN"
     private TextField txtN; // Value injected by FXMLLoader
@@ -48,12 +51,30 @@ public class FXMLController {
 
     @FXML
     void doClassifica(ActionEvent event) {
-
+    	txtResult.clear();
+    		Team t = cmbSquadra.getValue();
+    		if(t==null) {
+    			txtResult.setText("Selezionare una squadra");
+    			return;
+    		}
+    	txtResult.appendText("Classifica squadra "+t.toString()+"\n");
+    	txtResult.appendText("Squadre Migliori : \n");
+    	for(DifferenzaMinore dd : this.model.getClassificaMinore(t)) {
+    		txtResult.appendText(dd.toString()+"\n");
+    	}
+    	txtResult.appendText("Sqaudre Peggiori : \n");
+    	for(Differenza d : this.model.getClassifica(t)) {
+    		txtResult.appendText(d.toString()+"\n");
+    	}
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    		this.model.creaGrafo();
+    		txtResult.appendText("Grafo creato \n");
+        	txtResult.appendText("Numero vertici : "+this.model.nVertici()+"\n");
+        	txtResult.appendText("Numero archi : "+this.model.nArchi());
+        	this.cmbSquadra.getItems().addAll(this.model.getVertici());
     }
 
     @FXML
